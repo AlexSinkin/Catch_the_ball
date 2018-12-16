@@ -4,7 +4,7 @@ import numpy as np
 
 class Ball:
 
-    def __init__(self, canvas, x, y, radius, dx, dy, color):
+    def __init__(self, canvas, x, y, radius, dx, dy, color, count):
         self.canvas = canvas
         self.x = x
         self.y = y
@@ -12,8 +12,16 @@ class Ball:
         self.dx = dx
         self.dy = dy
         self.color = color
+        self.count = count
         self.object = canvas.create_oval(x-radius, y-radius, x+radius, y+radius, fill=color)
         return
+
+    def is_alive(self):
+        if self.count == 0:
+            return False
+        else:
+            self.count -= 1
+            return True
 
     def move(self):
         self.canvas.move(self.object, self.dx, self.dy)

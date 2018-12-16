@@ -62,7 +62,19 @@ def create_ball():
                 30,
                 random.randint(-10, 10),
                 random.randint(-10, 10),
-                random.choice(ball_colors))
+                random.choice(ball_colors),
+                ball_life_duration / time_tick)
+
+
+def check_ball():
+    for ball in balls_array:
+        if not ball.is_alive():
+            ball.destroy()
+            balls_array.remove(ball)
+            balls_array.append(create_ball())
+
+    window.after(time_tick, check_ball)
+    return
 
 
 def mouse_click(event):
@@ -74,13 +86,14 @@ def mouse_click(event):
             score_indicator.inc_hits()
             balls_array.remove(ball)
             balls_array.append(create_ball())
-            if move_balls_speed > 10:
-                move_balls_speed -= 1
+
     return
 
 
 #############################################################################
 
+time_tick = 100
+ball_life_duration = 2000
 move_balls_speed = 50
 
 window_width = 1200
@@ -96,8 +109,9 @@ create_window()
 
 score_indicator = Score(canvas, 1000, 50)
 
-balls_array.append(create_ball())
+for i in range(5):
+    balls_array.append(create_ball())
 
-window.after(move_balls_speed, move_balls)
+window.after(time_tick, check_ball)
 canvas.bind('<Button-1>', mouse_click)
 window.mainloop()
